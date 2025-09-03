@@ -1,24 +1,20 @@
-FROM python:3.11-slim
-
-# 必要なパッケージをインストール
-RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
-    tesseract-ocr-jpn \
-    git \
-    libgl1 \ 
-    && rm -rf /var/lib/apt/lists/*
+FROM python:3.11
 
 WORKDIR /app
 
-# 依存関係をインストール
+RUN pip install uv
+
 COPY requirements.txt .
-RUN pip install -r requirements.txt
 
-# mcp-ocrを直接インストール
-RUN pip install mcp-ocr
+# gitがインストールされていないとgit+...は動作しないため、インストールしておく
+RUN apt-get update && apt-get install -y git libgl1 tesseract-ocr tesseract-ocr-jpn poppler-utils
 
-# アプリケーションファイルをコピー
-COPY . .
+RUN uv pip install --system -r requirements.txt
 
-# MCPサーバーとしてstdio接続で起動
-CMD ["python", "-m", "mcp_ocr"]
+# OCRスクリプトと依存ファイルをコピー
+COPY batch_ocr.py .
+COPY mcp_ocr_patch.py .
+
+# デフォルトコマンド（対話モードで起動）
+CMD ["bash"]
+
