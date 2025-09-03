@@ -1,0 +1,9 @@
+# mcp-ocrリポジトリを直接指定
+git+https://github.com/rjn32s/mcp-ocr.git
+pydantic>=2.0.0
+mcp>=1.0.0
+uvicorn
+opencv-python
+pytesseract
+pdf2image
+poppler-utils

@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  mcp-ocr:
+    build: .
+    container_name: mcp-ocr-server
+    volumes:
+      - ./images:/app/images
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
